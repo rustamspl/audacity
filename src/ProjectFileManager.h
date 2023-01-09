@@ -106,7 +106,7 @@ public:
    bool GetMenuClose() const { return mMenuClose; }
    void SetMenuClose(bool value) { mMenuClose = value; }
 
-
+private:
    /*!
     @param fileName a path assumed to exist and contain an .aup3 project
     @param addtohistory whether to add the file to the MRU list
@@ -115,7 +115,6 @@ public:
    AudacityProject *OpenProjectFile(
       const FilePath &fileName, bool addtohistory);
 
-private:
    struct ReadProjectResults
    {
       bool parseSuccess;

@@ -202,13 +202,10 @@ namespace
       {
          return;
       };
-
-      //wxMessageBox(oldFileName, "zz");
+      // wxMessageBox(oldFileName, "zz");
 
       ProjectManager::OpenProject(&project, *it,
                                   true /* addtohistory */, false /* reuseNonemptyProject */);
-
-
    }
    void OnOpen(const CommandContext &context)
    {
