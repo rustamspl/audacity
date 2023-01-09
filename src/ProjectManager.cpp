@@ -53,6 +53,7 @@ Paul Licameli split from AudacityProject.cpp
 #include <wx/scrolbar.h>
 #include <wx/sizer.h>
 #include <wx/splitter.h>
+#include "Prefs.h"
 
 #ifdef __WXGTK__
 #include "../images/AudacityLogoAlpha.xpm"
@@ -330,7 +331,7 @@ AudacityProject *ProjectManager::New()
    bool bMaximized = false;
    bool bIconized = false;
    GetNextWindowPlacement(&wndRect, &bMaximized, &bIconized);
-   
+
    // Create and show a NEW project
    // Use a non-default deleter in the smart pointer!
    auto sp = AudacityProject::Create();
@@ -360,7 +361,7 @@ AudacityProject *ProjectManager::New()
 
    projectHistory.InitialState();
    projectManager.RestartTimer();
-   
+
    if(bMaximized) {
       window.Maximize(true);
    }
@@ -368,7 +369,7 @@ AudacityProject *ProjectManager::New()
       // if the user close down and iconized state we could start back up and iconized state
       // window.Iconize(TRUE);
    }
-   
+
    //Initialise the Listeners
    auto gAudioIO = AudioIO::Get();
    gAudioIO->SetListener(
@@ -379,18 +380,18 @@ AudacityProject *ProjectManager::New()
    SpectralSelectionBar::Get( project ).SetListener( &projectSelectionManager );
 #endif
    TimeToolBar::Get( project ).SetListener( &projectSelectionManager );
-      
+
    //Set the NEW project as active:
    SetActiveProject(p);
-   
+
    // Okay, GetActiveProject() is ready. Now we can get its CommandManager,
    // and add the shortcut keys to the tooltips.
    ToolManager::Get( *p ).RegenerateTooltips();
-   
+
    ModuleManager::Get().Dispatch(ProjectInitialized);
-   
+
    window.Show(true);
-   
+
    return p;
 }
 
@@ -460,9 +461,9 @@ void ProjectManager::OnCloseWindow(wxCloseEvent & event)
 
    // We may not bother to prompt the user to save, if the
    // project is now empty.
-   if (!sbSkipPromptingForSave 
-      && event.CanVeto() 
-      && (settings.EmptyCanBeDirty() || bHasTracks)) {
+   bool bSaveDlg = !gPrefs->Read(wxT("/Warnings/NoSaveDialogOnClose"), (long)false);
+   if (!sbSkipPromptingForSave && bSaveDlg && event.CanVeto() && (settings.EmptyCanBeDirty() || bHasTracks))
+   {
       if ( UndoManager::Get( project ).UnsavedChanges() ) {
          TitleRestorer Restorer( window, project );// RAII
          /* i18n-hint: The first %s numbers the project, the second %s is the project name.*/
@@ -784,7 +785,7 @@ void ProjectManager::OnTimer(wxTimerEvent& WXUNUSED(event))
 
    for (auto& meterToolBar : meterToolBars)
       meterToolBar.get().UpdateControls();
-   
+
    auto gAudioIO = AudioIO::Get();
    // gAudioIO->GetNumCaptureChannels() should only be positive
    // when we are recording.
@@ -822,7 +823,7 @@ void ProjectManager::OnStatusChange(StatusBarField field)
 
    const auto &msg = ProjectStatus::Get( project ).Get( field );
    SetStatusText( msg, field );
-   
+
    if ( field == mainStatusBarField )
       // When recording, let the NEW status message stay at least as long as
       // the timer interval (if it is not replaced again by this function),
@@ -880,7 +881,7 @@ int ProjectManager::GetEstimatedRecordingMinsLeftOnDisk(long lCaptureChannels) {
    double dRecTime = 0.0;
    double bytesOnDiskPerSample = SAMPLE_SIZE_DISK(oCaptureFormat);
    dRecTime = lFreeSpace.GetHi() * 4294967296.0 + lFreeSpace.GetLo();
-   dRecTime /= bytesOnDiskPerSample;   
+   dRecTime /= bytesOnDiskPerSample;
    dRecTime /= lCaptureChannels;
    dRecTime /= ProjectRate::Get( project ).GetRate();
 

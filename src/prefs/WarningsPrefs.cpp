@@ -70,6 +70,9 @@ void WarningsPrefs::PopulateOrExchange(ShuttleGui & S)
 
    S.StartStatic(XO("Show Warnings/Prompts for"));
    {
+      S.TieCheckBox(XXO("No Save Dialog On Close"),
+                    {wxT("/Warnings/NoSaveDialogOnClose"),
+                     false});
       S.TieCheckBox(XXO("Saving &projects"),
                     {wxT("/Warnings/FirstProjectSave"),
                      true});
