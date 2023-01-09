@@ -192,9 +192,11 @@ namespace
 
       auto &project = context.project;
 
-      auto &window = ProjectWindow::Get(project);
-      ProjectFileManager::Get(project).SetMenuClose(true);
-      window.Close();
+      auto &mgr = ProjectManager::Get(project);
+      // auto &window = ProjectWindow::Get(project);
+      // ProjectFileManager::Get(project).SetMenuClose(true);
+      // window.Close();
+      mgr.ResetProjectToEmpty();
 
       auto it = FileHistory::Global().begin();
       auto end = FileHistory::Global().end();
@@ -203,9 +205,9 @@ namespace
          return;
       };
       // wxMessageBox(oldFileName, "zz");
-
+      // MRUOpen(*it);
       ProjectManager::OpenProject(&project, *it,
-                                  true /* addtohistory */, false /* reuseNonemptyProject */);
+                                  true /* addtohistory */, true /* reuseNonemptyProject */);
    }
    void OnOpen(const CommandContext &context)
    {
