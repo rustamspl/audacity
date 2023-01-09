@@ -192,9 +192,6 @@ namespace
 
       auto &project = context.project;
 
-      auto &projectFileIO = ProjectFileIO::Get(project);
-
-
       auto &window = ProjectWindow::Get(project);
       ProjectFileManager::Get(project).SetMenuClose(true);
       window.Close();
