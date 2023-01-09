@@ -379,13 +379,13 @@ TickSizes( double UPP, int orientation, RulerFormat format, bool log )
 
    double d;
 
-   // As a heuristic, we want at least 22 pixels between each 
+   // As a heuristic, we want at least 22 pixels between each
    // minor tick.  We want to show numbers like "-48"
    // in that space.
    // If vertical, we don't need as much space.
    double units = ((orientation == wxHORIZONTAL) ? 22 : 16) * fabs(UPP);
 
-   mDigits = 0;
+   mDigits = 4;
 
    switch(format) {
    case LinearDBFormat:
@@ -623,7 +623,7 @@ TranslatableString LabelString(
       break;
    case LinearDBFormat:
       if (mMinor >= 1.0)
-         s.Printf(wxT("%d"), (int)floor(d+0.5));
+         s.Printf(wxT("%.2f"), d);
       else {
          int precision = -log10(mMinor);
          s.Printf(wxT("%.*f"), precision, d);
@@ -631,16 +631,18 @@ TranslatableString LabelString(
       break;
    case RealFormat:
       if (mMinor >= 1.0)
-         s.Printf(wxT("%d"), (int)floor(d+0.5));
+         s.Printf(wxT("%.3f"), d);
       else {
-         s.Printf(wxString::Format(wxT("%%.%df"), mDigits), d);
+         s.Printf(wxT("%.4f"), d);
+         //s.Printf(wxString::Format(wxT("%%.%df"), mDigits), d);
       }
       break;
    case RealLogFormat:
       if (mMinor >= 1.0)
          s.Printf(wxT("%d"), (int)floor(d+0.5));
       else {
-         s.Printf(wxString::Format(wxT("%%.%df"), mDigits), d);
+         //s.Printf(wxString::Format(wxT("%%.%df"), mDigits), d);
+         s.Printf(wxT("%.4f"), d);
       }
       break;
    case TimeFormat:
@@ -714,8 +716,8 @@ TranslatableString LabelString(
             // would show up as 60 when using g++ (Ubuntu 4.3.3-5ubuntu4) 4.3.3.
             t2.Printf(format, fmod((float)d, (float)60.0));
 #else
-            // For d in the range of hours, d is just very slightly below the value it should 
-            // have, because of using a double, which in turn yields values like 59:59:999999 
+            // For d in the range of hours, d is just very slightly below the value it should
+            // have, because of using a double, which in turn yields values like 59:59:999999
             // mins:secs:nanosecs when we want 1:00:00:000000
             // so adjust by less than a nano second per hour to get nicer number formatting.
             double dd = d * 1.000000000000001;
@@ -733,7 +735,7 @@ TranslatableString LabelString(
                format.Printf(wxT("%%%d.%dlf"), mDigits+3, mDigits);
             // dd will be reduced to just the seconds and fractional part.
             dd = dd - secs + (secs%60);
-            // truncate to appropriate number of digits, so that the print formatting 
+            // truncate to appropriate number of digits, so that the print formatting
             // doesn't round up 59.9999999 to 60.
             double multiplier = pow( 10, mDigits);
             dd = ((int)(dd * multiplier))/multiplier;
@@ -881,7 +883,7 @@ struct Ruler::Updater {
    const NumberScale mNumberScale = mRuler.mNumberScale;
 
    struct TickOutputs;
-   
+
    bool Tick( wxDC &dc,
       int pos, double d, const TickSizes &tickSizes, wxFont font,
       TickOutputs outputs
@@ -897,7 +899,7 @@ struct Ruler::Updater {
       wxDC &dc, int desiredPixelHeight );
 
    struct UpdateOutputs;
-   
+
    void Update(
       wxDC &dc, const Envelope* envelope,
       UpdateOutputs &allOutputs
@@ -1100,7 +1102,7 @@ void Ruler::Updater::UpdateLinear(
          Tick( dc, mid, value, tickSizes, mFonts.major, majorOutputs );
       else
          return -1;
-      
+
       return mid;
    };
 
@@ -1223,7 +1225,7 @@ void Ruler::Updater::UpdateNonlinear(
    double UPP = (mHiddenMax-mHiddenMin)/mLength;  // Units per pixel
    TickSizes tickSizes{ UPP, mOrientation, mFormat, true };
 
-   tickSizes.mDigits = 2; //TODO: implement dynamic digit computation
+   tickSizes.mDigits = 4; //TODO: implement dynamic digit computation
 
    double loLog = log10(mMin);
    double hiLog = log10(mMax);
@@ -1679,7 +1681,7 @@ void Ruler::Label::Draw(wxDC&dc, bool twoTone, wxColour c) const
 
 void Ruler::SetUseZoomInfo(int leftOffset, const ZoomInfo *zoomInfo)
 {
-   
+
    if ( mLeftOffset != leftOffset ||
       // Hm, is this invalidation sufficient?  What if *zoomInfo changes under us?
       mUseZoomInfo != zoomInfo

@@ -230,17 +230,19 @@ void FrequencyPlotDialog::Populate()
    };
 
    TranslatableStrings sizeChoices{
-      Verbatim( "128" ) ,
-      Verbatim( "256" ) ,
-      Verbatim( "512" ) ,
-      Verbatim( "1024" ) ,
-      Verbatim( "2048" ) ,
-      Verbatim( "4096" ) ,
-      Verbatim( "8192" ) ,
-      Verbatim( "16384" ) ,
-      Verbatim( "32768" ) ,
-      Verbatim( "65536" ) ,
-      Verbatim( "131072" ) ,
+       Verbatim("128"),
+       Verbatim("256"),
+       Verbatim("512"),
+       Verbatim("1024"),
+       Verbatim("2048"),
+       Verbatim("4096"),
+       Verbatim("8192"),
+       Verbatim("16384"),
+       Verbatim("32768"),
+       Verbatim("65536"),
+       Verbatim("131072"),
+       Verbatim("262144"),
+       Verbatim("1048576"),
    };
 
    TranslatableStrings funcChoices;
@@ -440,7 +442,7 @@ void FrequencyPlotDialog::Populate()
    // -------------------------------------------------------------------
    // ROW 5: Spacer
    // -------------------------------------------------------------------
-   
+
    S.AddSpace(5);
 
    S.SetBorder(2);
@@ -691,7 +693,7 @@ void FrequencyPlotDialog::DrawPlot()
       }
 
       memDC.SelectObject(wxNullBitmap);
-      
+
       mFreqPlot->Refresh();
 
       Refresh();
@@ -954,11 +956,11 @@ void FrequencyPlotDialog::PlotPaint(wxPaintEvent & event)
          auto xp = PitchName_Absolute(FreqToMIDInote(xPos));
          auto pp = PitchName_Absolute(FreqToMIDInote(bestpeak));
          /* i18n-hint: The %d's are replaced by numbers, the %s by musical notes, e.g. A#*/
-         cursor = XO("%d Hz (%s) = %d dB")
-            .Format( (int)(xPos + 0.5), xp, (int)(value + 0.5));
+         cursor = XO("%.4f Hz (%s) = %.4f dB")
+            .Format( (xPos+0.0 ), xp, (value + 0.0));
          /* i18n-hint: The %d's are replaced by numbers, the %s by musical notes, e.g. A#*/
-         peak = XO("%d Hz (%s) = %.1f dB")
-            .Format( (int)(bestpeak + 0.5), pp, bestValue );
+         peak = XO("%.4f Hz (%s) = %.1f dB")
+            .Format( (bestpeak + 0.0), pp, bestValue );
       } else if (xPos > 0.0 && bestpeak > 0.0) {
          auto xp = PitchName_Absolute(FreqToMIDInote(1.0 / xPos));
          auto pp = PitchName_Absolute(FreqToMIDInote(1.0 / bestpeak));
@@ -1229,11 +1231,9 @@ void OnPlotSpectrum(const CommandContext &context)
 // Register that menu item
 
 using namespace MenuTable;
-AttachedItem sAttachment{ wxT("Analyze/Analyzers/Windows"),
-   Command( wxT("PlotSpectrum"), XXO("Plot Spectrum..."),
-      OnPlotSpectrum,
-      AudioIONotBusyFlag() | WaveTracksSelectedFlag() | TimeSelectedFlag() )
-};
-
+AttachedItem sAttachment{wxT("Analyze/Analyzers/Windows"),
+                         Command(wxT("PlotSpectrum"), XXO("Plot Spectru&m..."),
+                                 OnPlotSpectrum,
+                                 AudioIONotBusyFlag() | WaveTracksSelectedFlag() | TimeSelectedFlag(), wxT("Ctrl+M"))};
 }
 
