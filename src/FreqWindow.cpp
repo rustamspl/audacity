@@ -242,6 +242,7 @@ void FrequencyPlotDialog::Populate()
        Verbatim("65536"),
        Verbatim("131072"),
        Verbatim("262144"),
+       Verbatim("524288"),
        Verbatim("1048576"),
    };
 
