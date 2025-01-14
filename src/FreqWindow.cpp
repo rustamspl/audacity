@@ -1176,9 +1176,9 @@ void OnPlotSpectrum(const CommandContext &context)
 
 using namespace MenuRegistry;
 AttachedItem sAttachment{
-   Command( wxT("PlotSpectrum"), XXO("Plot Spectrum..."),
+   Command( wxT("PlotSpectrum"), XXO("Plot Spectru&m..."),
       OnPlotSpectrum,
-      AudioIONotBusyFlag() | WaveTracksSelectedFlag() | TimeSelectedFlag() ),
+      AudioIONotBusyFlag() | WaveTracksSelectedFlag() | TimeSelectedFlag(), wxT("Ctrl+M") ),
    wxT("Analyze/Analyzers/Windows")
 };
 
