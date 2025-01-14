@@ -231,6 +231,12 @@ void FrequencyPlotDialog::Populate()
       Verbatim( "32768" ) ,
       Verbatim( "65536" ) ,
       Verbatim( "131072" ) ,
+      Verbatim( "262144" ) ,
+      Verbatim( "524288" ) ,
+      Verbatim( "1048576" ) ,
+      Verbatim( "2097152" ) ,
+      Verbatim( "4194304" ) ,
+      Verbatim( "8388608" ) ,
    };
 
    TranslatableStrings funcChoices;
