@@ -53,10 +53,11 @@ RulerUpdater::TickSizes::TickSizes(
       // If vertical, we don't need as much space.
       mUnits = ((orientation == wxHORIZONTAL) ? 22 : 16) * fabs(UPP);
 
-      mDigits = 4;
+      mDigits = 0;
 
       if (format)
          format->SetTickSizes(mUnits, mMajor, mMinor, mMinorMinor, mDigits);
+      if(mDigits<4)mDigits=4;
    }
 
 TranslatableString RulerUpdater::TickSizes::LabelString(
