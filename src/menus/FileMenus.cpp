@@ -489,7 +489,7 @@ auto FileMenu()
          /*i18n-hint: (verb)*/
          Command( wxT("Open"), XXO("&Open..."), OnOpen,
             AudioIONotBusyFlag(), wxT("Ctrl+O") ),
-         Command( wxT("ReOpen"), XXO("&ReOpen..."), OnReOpen,
+         Command( wxT("ReOpen"), XXO("&ReOpen..."), OnReopen,
             AudioIONotBusyFlag(), wxT("Ctrl+R") ),
 
    #ifdef EXPERIMENTAL_RESET
