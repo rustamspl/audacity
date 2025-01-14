@@ -192,6 +192,29 @@ void OnNew(const CommandContext & )
    ( void ) ProjectManager::New();
 }
 
+ void OnReopen(const CommandContext &context)
+   {
+
+      auto &project = context.project;
+
+      auto &mgr = ProjectManager::Get(project);
+      // auto &window = ProjectWindow::Get(project);
+      // ProjectFileManager::Get(project).SetMenuClose(true);
+      // window.Close();
+      mgr.ResetProjectToEmpty();
+
+      auto it = FileHistory::Global().begin();
+      auto end = FileHistory::Global().end();
+      if (it == end)
+      {
+         return;
+      };
+      // wxMessageBox(oldFileName, "zz");
+      // MRUOpen(*it);
+      ProjectManager::OpenProject(&project, *it,
+                                  true /* addtohistory */, true /* reuseNonemptyProject */);
+   }
+
 void OnOpen(const CommandContext &context )
 {
    auto &project = context.project;
@@ -466,6 +489,8 @@ auto FileMenu()
          /*i18n-hint: (verb)*/
          Command( wxT("Open"), XXO("&Open..."), OnOpen,
             AudioIONotBusyFlag(), wxT("Ctrl+O") ),
+         Command( wxT("ReOpen"), XXO("&ReOpen..."), OnReOpen,
+            AudioIONotBusyFlag(), wxT("Ctrl+R") ),
 
    #ifdef EXPERIMENTAL_RESET
          // Empty the current project and forget its name and path.  DANGEROUS
