@@ -30,7 +30,7 @@ void RealFormat::SetTickSizes(
 {
    double d = 0.000001;
    mDigits = 6;
-   for (;;) {
+   for (;;mDigits>=4) {
       if (units < d) {
          minor = d;
          major = d * 5.0;
