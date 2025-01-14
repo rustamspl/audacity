@@ -237,6 +237,8 @@ void FrequencyPlotDialog::Populate()
       Verbatim( "2097152" ) ,
       Verbatim( "4194304" ) ,
       Verbatim( "8388608" ) ,
+      Verbatim( "16777216" ) ,
+      Verbatim( "33554432" ) ,
    };
 
    TranslatableStrings funcChoices;
@@ -891,10 +893,10 @@ void FrequencyPlotDialog::PlotPaint(wxPaintEvent & event)
          auto xp = PitchName_Absolute(FreqToMIDInote(xPos));
          auto pp = PitchName_Absolute(FreqToMIDInote(bestpeak));
          /* i18n-hint: The %d's are replaced by numbers, the %s by musical notes, e.g. A#*/
-         cursor = XO("%.3f Hz (%s) = %d dB")
+         cursor = XO("%.4f Hz (%s) = %d dB")
             .Format( (xPos + 0.5), xp, (int)(value + 0.5));
          /* i18n-hint: The %d's are replaced by numbers, the %s by musical notes, e.g. A#*/
-         peak = XO("%.3f Hz (%s) = %.1f dB")
+         peak = XO("%.4f Hz (%s) = %.1f dB")
             .Format( (bestpeak + 0.5), pp, bestValue );
       } else if (xPos > 0.0 && bestpeak > 0.0) {
          auto xp = PitchName_Absolute(FreqToMIDInote(1.0 / xPos));
