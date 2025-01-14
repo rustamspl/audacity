@@ -57,7 +57,7 @@ RulerUpdater::TickSizes::TickSizes(
 
       if (format)
          format->SetTickSizes(mUnits, mMajor, mMinor, mMinorMinor, mDigits);
-      if(mDigits<4)mDigits=4;
+     
    }
 
 TranslatableString RulerUpdater::TickSizes::LabelString(
@@ -75,7 +75,6 @@ TranslatableString RulerUpdater::TickSizes::LabelString(
 
       // PRL Todo: are all these cases properly localized?  (Decimal points,
       // hour-minute-second, etc.?)
-
       if (format)
          format->SetLabelString(s, d, mUnits, mMinor, mDigits, tickType);
 
