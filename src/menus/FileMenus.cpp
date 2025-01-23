@@ -189,7 +189,23 @@ void OnNew(const CommandContext & )
 {
    ( void ) ProjectManager::New();
 }
+ void OnReopen(const CommandContext &context)
+   {
 
+      auto &project = context.project;
+
+      auto &mgr = ProjectManager::Get(project);
+      mgr.ResetProjectToEmpty();
+
+      auto it = FileHistory::Global().begin();
+      auto end = FileHistory::Global().end();
+      if (it == end)
+      {
+         return;
+      };
+      ProjectManager::OpenProject(&project, *it,
+                                  true /* addtohistory */, true /* reuseNonemptyProject */);
+   }
 void OnOpen(const CommandContext &context )
 {
    auto &project = context.project;
@@ -438,7 +454,9 @@ BaseItemSharedPtr FileMenu()
          /*i18n-hint: "New" is an action (verb) to create a NEW project*/
          Command( wxT("New"), XXO("&New"), OnNew,
             AudioIONotBusyFlag(), wxT("Ctrl+N") ),
-
+         /*i18n-hint: (verb)*/
+                     Command(wxT("Reopen"), XXO("&Reopen..."), OnReopen,
+                           AudioIONotBusyFlag(), wxT("Ctrl+R")),
          /*i18n-hint: (verb)*/
          Command( wxT("Open"), XXO("&Open..."), OnOpen,
             AudioIONotBusyFlag(), wxT("Ctrl+O") ),
