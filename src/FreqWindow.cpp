@@ -986,22 +986,22 @@ void FrequencyPlotDialog::PlotPaint(wxPaintEvent & event)
          auto xp = PitchName_Absolute(FreqToMIDInote(xPos));
          auto pp = PitchName_Absolute(FreqToMIDInote(bestpeak));
          /* i18n-hint: The %d's are replaced by numbers, the %s by musical notes, e.g. A#*/
-         cursor = XO("%d Hz (%s) = %d dB")
-            .Format( (int)(xPos + 0.5), xp, (int)(value + 0.5));
+         cursor = XO("%.4f Hz (%s) = %.4f dB")
+            .Format( (xPos + 0.5), xp, (value + 0.5));
          /* i18n-hint: The %d's are replaced by numbers, the %s by musical notes, e.g. A#*/
-         peak = XO("%d Hz (%s) = %.1f dB")
-            .Format( (int)(bestpeak + 0.5), pp, bestValue );
+         peak = XO("%.4f Hz (%s) = %.4f dB")
+            .Format( (bestpeak + 0.5), pp, bestValue );
       } else if (xPos > 0.0 && bestpeak > 0.0) {
          auto xp = PitchName_Absolute(FreqToMIDInote(1.0 / xPos));
          auto pp = PitchName_Absolute(FreqToMIDInote(1.0 / bestpeak));
          /* i18n-hint: The %d's are replaced by numbers, the %s by musical notes, e.g. A#
           * the %.4f are numbers, and 'sec' should be an abbreviation for seconds */
-         cursor = XO("%.4f sec (%d Hz) (%s) = %f")
-            .Format( xPos, (int)(1.0 / xPos + 0.5), xp, value );
+         cursor = XO("%.4f sec (%.4f Hz) (%s) = %f")
+            .Format( xPos, (1.0 / xPos + 0.5), xp, value );
          /* i18n-hint: The %d's are replaced by numbers, the %s by musical notes, e.g. A#
           * the %.4f are numbers, and 'sec' should be an abbreviation for seconds */
-         peak = XO("%.4f sec (%d Hz) (%s) = %.3f")
-            .Format( bestpeak, (int)(1.0 / bestpeak + 0.5), pp, bestValue );
+         peak = XO("%.4f sec (%.4f Hz) (%s) = %.3f")
+            .Format( bestpeak, (1.0 / bestpeak + 0.5), pp, bestValue );
       }
       mCursorText->SetValue( cursor.Translation() );
       mPeakText->SetValue( peak.Translation() );
